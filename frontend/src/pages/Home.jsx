@@ -52,7 +52,7 @@ const Home = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/chat",
+        "https://atlas-ai-tiku.onrender.com/api/chat",
         { title },
         { withCredentials: true },
       );
@@ -68,7 +68,7 @@ const Home = () => {
   const handleRenameChat = async (id, title) => {
     try {
       await axios.patch(
-        `http://localhost:3000/api/chat/${id}`,
+        `https://atlas-ai-tiku.onrender.com/api/chat/${id}`,
         { title },
         { withCredentials: true },
       );
@@ -81,7 +81,7 @@ const Home = () => {
 
   const handleDeleteChat = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/chat/${id}`, {
+      await axios.delete(`https://atlas-ai-tiku.onrender.com/api/chat/${id}`, {
         withCredentials: true,
       });
 
@@ -110,7 +110,7 @@ const Home = () => {
   const getMessages = async (chatId) => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/chat/messages/${chatId}`,
+        `https://atlas-ai-tiku.onrender.com/api/chat/messages/${chatId}`,
         { withCredentials: true },
       );
 
@@ -127,11 +127,11 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/chat", { withCredentials: true })
+      .get("https://atlas-ai-tiku.onrender.com/api/chat", { withCredentials: true })
       .then((res) => dispatch(setChats(res.data.chats.reverse())))
       .catch(console.error);
 
-    const s = io("http://localhost:3000", { withCredentials: true });
+    const s = io("https://atlas-ai-tiku.onrender.com", { withCredentials: true });
 
     s.on("ai-response", (payload) => {
       setMessages((prev) => [

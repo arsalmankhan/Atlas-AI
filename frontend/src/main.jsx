@@ -32,7 +32,7 @@ initSystemTheme();
 
 async function initAuth() {
   try {
-    const res = await axios.get("http://localhost:3000/api/auth/me", {
+    const res = await axios.get("https://atlas-ai-tiku.onrender.com/api/auth/me", {
       withCredentials: true,
     });
     store.dispatch(setUser(res.data.user));
