@@ -2,6 +2,12 @@ const userModel = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+};
+
 async function registerUser(req, res) {
   const {
     fullName: { firstName, lastName },
@@ -16,6 +22,7 @@ async function registerUser(req, res) {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
+
   const user = await userModel.create({
     fullName: { firstName, lastName },
     email,
@@ -24,7 +31,7 @@ async function registerUser(req, res) {
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-  res.cookie("token", token);
+  res.cookie("token", token, cookieOptions);
 
   res.status(201).json({
     message: "User created successfully",
@@ -38,6 +45,7 @@ async function registerUser(req, res) {
 
 async function loginUser(req, res) {
   const { email, password } = req.body;
+
   const user = await userModel.findOne({ email });
 
   if (!user) {
@@ -52,7 +60,7 @@ async function loginUser(req, res) {
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-  res.cookie("token", token);
+  res.cookie("token", token, cookieOptions);
 
   res.status(200).json({
     message: "User logged in successful",
@@ -67,7 +75,10 @@ async function loginUser(req, res) {
 async function getMe(req, res) {
   try {
     const user = req.user;
-    if (!user) return res.status(401).json({ message: "Unauthorized" });
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
     res.status(200).json({
       user: {
@@ -83,13 +94,17 @@ async function getMe(req, res) {
 
 async function logoutUser(req, res) {
   try {
-    res.clearCookie("token");
-    return res.status(200).json({ message: "Logged out successfully" });
+    res.clearCookie("token", cookieOptions);
+
+    return res.status(200).json({
+      message: "Logged out successfully",
+    });
   } catch (err) {
-    return res.status(500).json({ message: "Logout failed" });
+    return res.status(500).json({
+      message: "Logout failed",
+    });
   }
 }
-
 
 module.exports = {
   registerUser,
