@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://atlas-ai-tiku.onrender.com"],
+    origin: ["https://atlas-ai-1-y418.onrender.com", "https://atlas-ai-tiku.onrender.com"],
     credentials: true,
   }),
 );
