@@ -9,7 +9,7 @@ const client = new OpenAI({
 async function generateResponse(messages) {
   try {
     const completion = await client.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: "openai/gpt-oss-120b",
       messages,
       temperature: 0.6,
     });
@@ -26,8 +26,12 @@ let embedder;
 async function loadModel() {
   if (!embedder) {
     console.log("Loading embedding model...");
-    embedder = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+    embedder = await pipeline(
+      "feature-extraction",
+      "Xenova/all-MiniLM-L6-v2"
+    );
   }
+
   return embedder;
 }
 
